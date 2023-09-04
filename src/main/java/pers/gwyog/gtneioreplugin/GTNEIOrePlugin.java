@@ -12,7 +12,11 @@ import pers.gwyog.gtneioreplugin.util.GT5OreSmallHelper;
 
 import java.util.HashSet;
 
-@Mod(modid = GTNEIOrePlugin.MODID, name = GTNEIOrePlugin.NAME, version = GTNEIOrePlugin.VERSION, dependencies = "required-after:gregtech;required-after:NotEnoughItems")
+@Mod(modid = Tags.MODID,
+     name = Tags.MODNAME,
+     version = Tags.VERSION,
+     dependencies = "required-after:gregtech;" +
+                    "required-after:NotEnoughItems")
 public class GTNEIOrePlugin {
     public static final String MODID = "gtneioreplugin";
     public static final String NAME = "GT NEI Ore Plugin GT:NH Mod";
@@ -29,7 +33,7 @@ public class GTNEIOrePlugin {
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
-        Config c = new Config(event, this.MODID + ".cfg");
+        Config c = new Config(event, Tags.MODID + ".cfg");
         csv = c.tConfig.getBoolean("print csv", "ALL", false, "princsv, you need apache commons collections to be injected in the minecraft jar.");
         CSVname = c.tConfig.getString("CSV_name", "ALL", event.getModConfigurationDirectory() + "/GTNH-Oresheet.csv", "rename the oresheet here, it will appear in /config");
         CSVnameSmall= c.tConfig.getString("CSV_name_for_Small_Ore_Sheet", "ALL", event.getModConfigurationDirectory() + "/GTNH-Small-Ores-Sheet.csv", "rename the oresheet here, it will appear in /config");
