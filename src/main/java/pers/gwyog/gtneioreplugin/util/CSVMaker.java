@@ -141,15 +141,18 @@ public class CSVMaker implements Runnable {
                 String Dims = GT5OreLayerHelper.bufferedDims.get(pair.getValue());
                 OreLayerWrapper oreLayer = (OreLayerWrapper) pair.getValue();
                 oremix.setOreName(oreLayer.veinName.split("\\.")[2]);
-                oremix.setPrimary(PluginGT5VeinStat.getGTOreLocalizedName(oreLayer.Meta[0]));
-                oremix.setSecondary(PluginGT5VeinStat.getGTOreLocalizedName(oreLayer.Meta[1]));
-                oremix.setInbetween(PluginGT5VeinStat.getGTOreLocalizedName(oreLayer.Meta[2]));
-                oremix.setAround(PluginGT5VeinStat.getGTOreLocalizedName(oreLayer.Meta[3]));
+                oremix.setPrimary(oreLayer.materials[0].mLocalizedName);
+                oremix.setSecondary(oreLayer.materials[1].mLocalizedName);
+                oremix.setInbetween(oreLayer.materials[2].mLocalizedName);
+                oremix.setAround(oreLayer.materials[3].mLocalizedName);
                 oremix.setSize(oreLayer.size);
                 oremix.setHeight(oreLayer.worldGenHeightRange);
                 oremix.setDensity(oreLayer.density);
                 oremix.setWeight(oreLayer.randomWeight);
-                oremix.setMix(Integer.toString(oreLayer.Meta[0]) + "|" + Integer.toString(oreLayer.Meta[1]) + "|" + Integer.toString(oreLayer.Meta[2]) + "|" + Integer.toString(oreLayer.Meta[3]));
+                oremix.setMix(Integer.toString(oreLayer.materials[0].mMetaItemSubID) + "|" +
+                              Integer.toString(oreLayer.materials[1].mMetaItemSubID) + "|" +
+                              Integer.toString(oreLayer.materials[2].mMetaItemSubID) + "|" +
+                              Integer.toString(oreLayer.materials[3].mMetaItemSubID));
                 oremix.as = Dims.contains("As");
                 oremix.bc = Dims.contains("BC");
                 oremix.be = Dims.contains("BE");

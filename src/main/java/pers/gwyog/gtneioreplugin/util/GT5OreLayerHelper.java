@@ -1,5 +1,6 @@
 package pers.gwyog.gtneioreplugin.util;
 
+import gregtech.api.enums.Materials;
 import gregtech.common.GT_Worldgen_GT_Ore_Layer;
 
 import java.util.ArrayList;
@@ -32,16 +33,16 @@ public class GT5OreLayerHelper {
 
     public class OreLayerWrapper {
         public String veinName, worldGenHeightRange;
-        public short[] Meta = new short[4];
+        public Materials[] materials = new Materials[4];
         public short randomWeight, size, density;
         public List<Integer> Weight = new ArrayList<Integer>();
 
         public OreLayerWrapper(GT_Worldgen_GT_Ore_Layer worldGen) {
             this.veinName = worldGen.mWorldGenName;
-            this.Meta[0] = worldGen.mPrimaryMeta;
-            this.Meta[1] = worldGen.mSecondaryMeta;
-            this.Meta[2] = worldGen.mBetweenMeta;
-            this.Meta[3] = worldGen.mSporadicMeta;
+            this.materials[0] = worldGen.mPrimary;
+            this.materials[1] = worldGen.mSecondary;
+            this.materials[2] = worldGen.mBetween;
+            this.materials[3] = worldGen.mSporadic;
             this.size = worldGen.mSize;
             this.density = worldGen.mDensity;
             this.worldGenHeightRange = worldGen.mMinY + "-" + worldGen.mMaxY;
