@@ -125,18 +125,8 @@ public class PluginGT5VeinStat extends PluginGT5Base {
     public void loadCraftingRecipes(String outputId, Object... results) {
         if (outputId.equals(getOutputId())) {
             for (String veinName : GT5OreLayerHelper.mapOreLayerWrapper.keySet()) {
-                OreLayerWrapper oreLayerWrapper = GT5OreLayerHelper.mapOreLayerWrapper.get(veinName);
-                List<ItemStack> stackListPrimary = new ArrayList<>();
-                List<ItemStack> stackListSecondary = new ArrayList<>();
-                List<ItemStack> stackListBetween = new ArrayList<>();
-                List<ItemStack> stackListSporadic = new ArrayList<>();
-                for (int i = 0; i < 7; i++) {
-                    stackListPrimary.add(new ItemStack(GT_Block_Ore_Abstract.getOre(oreLayerWrapper.materials[0], OreSize.Normal)));
-                    stackListSecondary.add(new ItemStack(GT_Block_Ore_Abstract.getOre(oreLayerWrapper.materials[1], OreSize.Normal)));
-                    stackListBetween.add(new ItemStack(GT_Block_Ore_Abstract.getOre(oreLayerWrapper.materials[2], OreSize.Normal)));
-                    stackListSporadic.add(new ItemStack(GT_Block_Ore_Abstract.getOre(oreLayerWrapper.materials[3], OreSize.Normal)));
-                }
-                this.arecipes.add(new CachedVeinStatRecipe(veinName, stackListPrimary, stackListSecondary, stackListBetween, stackListSporadic));
+                OreLayerWrapper oreLayer = GT5OreLayerHelper.mapOreLayerWrapper.get(veinName);
+                this.addRecipesForOreLayer(oreLayer);
             }
         } else
             super.loadCraftingRecipes(outputId, results);
@@ -160,70 +150,49 @@ public class PluginGT5VeinStat extends PluginGT5Base {
                                     oreLayer.materials[3] == oreMaterial;
 
                     if (condition) {
-                        val primaryOre = GT_Block_Ore_Abstract.getOre(oreLayer.materials[0], OreSize.Normal);
-                        val primaryOreList = new ArrayList<ItemStack>();
-
-                        if (primaryOre != null) {
-                            primaryOreList.add(new ItemStack(primaryOre));
-                        }
-
-                        val secondaryOre = GT_Block_Ore_Abstract.getOre(oreLayer.materials[1], OreSize.Normal);
-                        val secondaryOreList = new ArrayList<ItemStack>();
-
-                        if (secondaryOre != null) {
-                            secondaryOreList.add(new ItemStack(secondaryOre));
-                        }
-
-                        val betweenOre = GT_Block_Ore_Abstract.getOre(oreLayer.materials[2], OreSize.Normal);
-                        val betweenOreList = new ArrayList<ItemStack>();
-
-                        if (betweenOre != null) {
-                            betweenOreList.add(new ItemStack(betweenOre));
-                        }
-
-                        val sporadicOre = GT_Block_Ore_Abstract.getOre(oreLayer.materials[3], OreSize.Normal);
-                        val sporadicOreList = new ArrayList<ItemStack>();
-
-                        if (sporadicOre != null) {
-                            sporadicOreList.add(new ItemStack(sporadicOre));
-                        }
-
-                        this.arecipes.add(new CachedVeinStatRecipe(oreLayer.veinName,
-                                                                   primaryOreList,
-                                                                   secondaryOreList,
-                                                                   betweenOreList,
-                                                                   sporadicOreList));
+                        this.addRecipesForOreLayer(oreLayer);
                     }
                 }
             }
         } else {
             super.loadCraftingRecipes(stack);
         }
+    }
 
-//        if (stack.getUnlocalizedName().startsWith("gt.blockores")) {
-//            if (stack.getItemDamage() > 16000) {
-//                super.loadCraftingRecipes(stack);
-//                return;
-//            }
-//            short baseMeta = (short) (stack.getItemDamage() % 1000);
-//            for (OreLayerWrapper worldGen : GT5OreLayerHelper.mapOreLayerWrapper.values()) {
-//                if (worldGen.materials[0] == baseMeta || worldGen.materials[1] == baseMeta || worldGen.materials[2] == baseMeta || worldGen.materials[3] == baseMeta) {
-//                    List<ItemStack> stackListPrimary = new ArrayList<ItemStack>();
-//                    List<ItemStack> stackListSecondary = new ArrayList<ItemStack>();
-//                    List<ItemStack> stackListBetween = new ArrayList<ItemStack>();
-//                    List<ItemStack> stackListSporadic = new ArrayList<ItemStack>();
-//                    for (int i = 0; i < getMaximumMaterialIndex(baseMeta, false); i++) {
-//                        stackListPrimary.add(new ItemStack(GregTech_API.sBlockOres1, 1, worldGen.materials[0] + i * 1000));
-//                        stackListSecondary.add(new ItemStack(GregTech_API.sBlockOres1, 1, worldGen.materials[1] + i * 1000));
-//                        stackListBetween.add(new ItemStack(GregTech_API.sBlockOres1, 1, worldGen.materials[2] + i * 1000));
-//                        stackListSporadic.add(new ItemStack(GregTech_API.sBlockOres1, 1, worldGen.materials[3] + i * 1000));
-//                    }
-//                    this.arecipes.add(new CachedVeinStatRecipe(worldGen.veinName, stackListPrimary, stackListSecondary, stackListBetween, stackListSporadic));
-//                }
-//            }
-//        } else {
-//            super.loadCraftingRecipes(stack);
-//        }
+    protected void addRecipesForOreLayer(OreLayerWrapper oreLayer) {
+        val primaryOre = GT_Block_Ore_Abstract.getOre(oreLayer.materials[0], OreSize.Normal);
+        val primaryOreList = new ArrayList<ItemStack>();
+
+        if (primaryOre != null) {
+            primaryOreList.add(new ItemStack(primaryOre));
+        }
+
+        val secondaryOre = GT_Block_Ore_Abstract.getOre(oreLayer.materials[1], OreSize.Normal);
+        val secondaryOreList = new ArrayList<ItemStack>();
+
+        if (secondaryOre != null) {
+            secondaryOreList.add(new ItemStack(secondaryOre));
+        }
+
+        val betweenOre = GT_Block_Ore_Abstract.getOre(oreLayer.materials[2], OreSize.Normal);
+        val betweenOreList = new ArrayList<ItemStack>();
+
+        if (betweenOre != null) {
+            betweenOreList.add(new ItemStack(betweenOre));
+        }
+
+        val sporadicOre = GT_Block_Ore_Abstract.getOre(oreLayer.materials[3], OreSize.Normal);
+        val sporadicOreList = new ArrayList<ItemStack>();
+
+        if (sporadicOre != null) {
+            sporadicOreList.add(new ItemStack(sporadicOre));
+        }
+
+        this.arecipes.add(new CachedVeinStatRecipe(oreLayer.veinName,
+                                                   primaryOreList,
+                                                   secondaryOreList,
+                                                   betweenOreList,
+                                                   sporadicOreList));
     }
 
     @Override
@@ -309,22 +278,48 @@ public class PluginGT5VeinStat extends PluginGT5Base {
         public PositionedStack positionedStackBetween;
         public PositionedStack positionedStackSporadic;
 
-        public CachedVeinStatRecipe(String veinName, List<ItemStack> stackListPrimary, List<ItemStack> stackListSecondary,
-                                    List<ItemStack> stackListBetween, List<ItemStack> stackListSporadic) {
+        public CachedVeinStatRecipe(String veinName,
+                                    List<ItemStack> stackListPrimary,
+                                    List<ItemStack> stackListSecondary,
+                                    List<ItemStack> stackListBetween,
+                                    List<ItemStack> stackListSporadic) {
             this.veinName = veinName;
-            positionedStackPrimary = new PositionedStack(stackListPrimary, 2, 0);
-            positionedStackSecondary = new PositionedStack(stackListSecondary, 22, 0);
-            positionedStackBetween = new PositionedStack(stackListBetween, 42, 0);
-            positionedStackSporadic = new PositionedStack(stackListSporadic, 62, 0);
+            if (!stackListPrimary.isEmpty()) {
+                this.positionedStackPrimary = new PositionedStack(stackListPrimary, 2, 0);
+            }
+
+            if (!stackListSecondary.isEmpty()) {
+                this.positionedStackSecondary = new PositionedStack(stackListSecondary, 22, 0);
+            }
+
+            if (!stackListBetween.isEmpty()) {
+                this.positionedStackBetween = new PositionedStack(stackListBetween, 42, 0);
+            }
+
+            if (!stackListSporadic.isEmpty()) {
+                this.positionedStackSporadic = new PositionedStack(stackListSporadic, 62, 0);
+            }
         }
 
         @Override
         public List<PositionedStack> getIngredients() {
-            List<PositionedStack> ingredientsList = new ArrayList<PositionedStack>();
-            ingredientsList.add(positionedStackPrimary);
-            ingredientsList.add(positionedStackSecondary);
-            ingredientsList.add(positionedStackBetween);
-            ingredientsList.add(positionedStackSporadic);
+            List<PositionedStack> ingredientsList = new ArrayList<>();
+            if (this.positionedStackPrimary != null) {
+                ingredientsList.add(this.positionedStackPrimary);
+            }
+
+            if (this.positionedStackSecondary != null) {
+                ingredientsList.add(this.positionedStackSecondary);
+            }
+
+            if (this.positionedStackBetween != null) {
+                ingredientsList.add(this.positionedStackBetween);
+            }
+
+            if (this.positionedStackSporadic != null) {
+                ingredientsList.add(this.positionedStackSporadic);
+            }
+
             return ingredientsList;
         }
 
@@ -332,7 +327,5 @@ public class PluginGT5VeinStat extends PluginGT5Base {
         public PositionedStack getResult() {
             return null;
         }
-
     }
-
 }
