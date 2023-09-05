@@ -1,13 +1,10 @@
 // Add your dependencies here
 
 dependencies {
-//    compile("eu.usrv:YAMCore:1.7.10-0.5.79:deobf") {
-//        transitive = false
-//    }
-//    compile("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev") {
-//        transitive = false
-//    }
-    compile("gtmega:gt5u-mc1.7.10:5.31.0:dev")
+    compileOnly("org.projectlombok:lombok:1.18.24")
+    annotationProcessor("org.projectlombok:lombok:1.18.24")
+
+    compile("gtmega:gt5u-mc1.7.10:5.32.0-mega:dev")
 
     compile("codechicken:codechickencore-mc1.7.10:1.0.9-gtmega:dev") {
         transitive = false;
