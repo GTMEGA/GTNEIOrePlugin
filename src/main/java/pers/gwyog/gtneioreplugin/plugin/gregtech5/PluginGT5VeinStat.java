@@ -3,22 +3,17 @@ package pers.gwyog.gtneioreplugin.plugin.gregtech5;
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import cpw.mods.fml.common.Loader;
-import gregtech.api.GregTech_API;
-import gregtech.api.enums.Materials;
 import gregtech.common.blocks.GT_Block_Ore;
 import gregtech.common.blocks.GT_Block_Ore_Abstract;
 import lombok.val;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import pers.gwyog.gtneioreplugin.util.GT5OreLayerHelper;
 import pers.gwyog.gtneioreplugin.util.GT5OreLayerHelper.OreLayerWrapper;
-import scala.actors.threadpool.Arrays;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,7 +30,7 @@ public class PluginGT5VeinStat extends PluginGT5Base {
             return new String[]{I18n.format("gtnop." + unlocalizedName) + I18n.format("gtnop.ore.vein.name")};
     }
 
-    public static String coustomVeinRenamer(OreLayerWrapper oreLayer) {
+    public static String customVeinRenamer(OreLayerWrapper oreLayer) {
         Set<String> s = new HashSet<String>();
         for (int i = 0; i < 4; i++)
             s.add(oreLayer.materials[i].mLocalizedName.replaceAll(" ", ""));
@@ -70,7 +65,7 @@ public class PluginGT5VeinStat extends PluginGT5Base {
 
     public static String[] get_Cnames(OreLayerWrapper oreLayer) {
 
-        String[] splt = coustomVeinRenamer(oreLayer).split("\\s");
+        String[] splt = customVeinRenamer(oreLayer).split("\\s");
     	/*HashSet<String> h = new HashSet<String>();
     	for (int i=0; i < splt.length;i++) {
     		h.add(splt[i]);

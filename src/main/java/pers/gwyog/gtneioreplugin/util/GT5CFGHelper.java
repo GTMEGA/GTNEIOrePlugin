@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -20,51 +21,41 @@ public class GT5CFGHelper {
 
     private static File F = GregTech_API.sWorldgenFile.mConfig.getConfigFile();
 
-    public static String GT5CFGSmallOres(String Veinname) {
+    public static String GT5CFGSmallOres(String veinName) {
         List<String> raw = new ArrayList<String>();
         List<String> rawbools = new ArrayList<String>();
         String st = null;
         Configuration c = new Configuration(F);
-        ConfigCategory configCategory = c.getCategory("worldgen." + Veinname);
+        ConfigCategory configCategory = c.getCategory("worldgen." + veinName);
         for (Property p : configCategory.getOrderedValues()) {
             if (p.isBooleanValue() && p.getBoolean()) {
                 raw.add(p.getName() + "=" + p.getBoolean());
             }
         }
-        if (!raw.isEmpty())
-            for (int i = 0; i < raw.size(); i++) {
-                for (int j = 0; j < DimensionHelper.DimName.length; j++)
-                    if (raw.get(i).contains(DimensionHelper.DimName[j]))
-                        rawbools.add(raw.get(i));
-            }
-        else GTNEIOrePlugin.LOG.info("Config entry not found for Vein: " + Veinname);
+        test1(veinName, raw, rawbools);
 
-        String ret = " ";
+        StringBuilder ret = new StringBuilder(" ");
 
-        HashSet<String> rawboolsset = new HashSet<String>();
+        HashSet<String> rawBoolSet = new HashSet<>();
         if (!rawbools.isEmpty()) {
-            for (int i = 0; i < rawbools.size(); i++) {
-                st = rawbools.get(i).replace("B:", "").replace("_true", "").replace("_false", "").replaceAll(" ", "").replaceAll("\"", "");
-                rawboolsset.add(st);
-            }
-            rawbools = new ArrayList<String>(rawboolsset);
+            rawbools = test2(rawbools, rawBoolSet);
             for (int i = 0; i < rawbools.size(); i++) {
                 st = rawbools.get(i);
                 for (int j = 0; j < DimensionHelper.DimName.length; j++) {
                     if (st.contains(DimensionHelper.DimName[j]))
                         if (st.contains("=true"))
-                            ret = (ret + DimensionHelper.DimNameDisplayed[j] + ",");
+                            ret.append(DimensionHelper.DimNameDisplayed[j]).append(",");
                 }
             }
         }
-        ret = ret.trim();
-        if (ret.equals("") || ret.equals(" "))
-            ret = "Not aviable in any Galactic Dim!";
-        return ret;
+        ret = new StringBuilder(ret.toString().trim());
+        if ((ret.length() == 0) || ret.toString().equals(" "))
+            ret = new StringBuilder("Not available in any Galactic Dim!");
+        return ret.toString();
     }
 
-    public static String GT5CFG(String Veinname) {
-        //FMLLog.info(Veinname);
+    public static String GT5CFG(String veinName) {
+//        FMLLog.info(veinName);
         if (F == null) {
             FMLLog.bigWarning("GT_CFG_NOT_found[0]");
             return "Error while Loading CFG";
@@ -73,15 +64,15 @@ public class GT5CFGHelper {
                 int buffer = (int) (0.1 * Runtime.getRuntime().freeMemory());
                 if (buffer > F.length())
                     buffer = (int) F.length();
-                //allocate 10% of free memory for read-in-buffer, if there is less than filesize memory aviable
+                //allocate 10% of free memory for read-in-buffer, if there is less than filesize memory available
                 //FMLLog.info("GT_CFG_found[0]");
                 FileReader in = new FileReader(F);
                 //FMLLog.info("FileReader created");
                 BufferedReader reader = new BufferedReader(in, buffer);
                 //FMLLog.info("BufferedReader" +Integer.toString(buffer)+"created");
-                String st = null;
-                List<String> raw = new ArrayList<String>();
-                List<String> rawbools = new ArrayList<String>();
+                String line = null;
+                List<String> raw = new ArrayList<>();
+                List<String> rawBools = new ArrayList<>();
                 Boolean[] found = new Boolean[2];
                 found[0] = false;
                 found[1] = false;
@@ -89,96 +80,127 @@ public class GT5CFGHelper {
                 do {
                     //FMLLog.info("erste");
                     //read until reached eof or mix {
-                    st = reader.readLine();
-                    //FMLLog.info("st: "+st);
-                    if (st != null && st.trim().equals("mix {")) {
-                        while (!((st == null) || ((st != null) && found[0]))) {
+                    line = reader.readLine();
+                    //FMLLog.info("line: "+line);
+                    if (line != null && line.trim().equals("mix {")) {
+                        while (!((line == null) || ((line != null) && found[0]))) {
                             //FMLLog.info("zweite");
-                            st = reader.readLine();
-                            //read until reached eof or Veinname {
-                            //FMLLog.info("MIXst: "+st);
-                            if (st != null && st.trim().equals(Veinname + " {")) {
-                                //FMLLog.info("VEINNAMEst: "+st);
-                                while (!((st == null) || ((st != null) && found[0]))) {
-                                    st = reader.readLine();
-                                    if ((!(st == null)) && st.trim().equals("}"))
+                            line = reader.readLine();
+                            //read until reached eof or veinName {
+                            //FMLLog.info("MIXst: "+line);
+                            if (line != null && line.trim().equals(veinName + " {")) {
+                                //FMLLog.info("VEINNAMEst: "+line);
+                                while (!((line == null) || ((line != null) && found[0]))) {
+                                    line = reader.readLine();
+                                    if ((!(line == null)) && line.trim().equals("}"))
                                         found[0] = true;
                                     //FMLLog.info("dritte");
-                                    //add everything below Veinname { undtil } to raw
-                                    raw.add(st);
+                                    //add everything below veinName { undtil } to raw
+                                    raw.add(line);
                                 }
                             }
                         }
                     }
 
-                    if (st != null && st.trim().equals("dimensions {")) {
-                        while (!((st == null) || ((st != null) && found[1]))) {
+                    if (line != null && line.trim().equals("dimensions {")) {
+                        while (!((line == null) || ((line != null) && found[1]))) {
                             //FMLLog.info("zweite");
-                            st = reader.readLine();
-                            if (st != null && (st.trim().equals("mix {"))) {
-                                while (!((st == null) || ((st != null) && found[1]))) {
+                            line = reader.readLine();
+                            if (line != null && (line.trim().equals("mix {"))) {
+                                while (!((line == null) || ((line != null) && found[1]))) {
                                     //FMLLog.info("dritte");
-                                    st = reader.readLine();
-                                    //read until reached eof or Veinname {
-                                    //FMLLog.info("MIXst: "+st);
-                                    if (st != null && st.trim().equals(Veinname + " {")) {
-                                        //FMLLog.info("VEINNAMEst: "+st);
-                                        while (!((st == null) || ((st != null) && found[1]))) {
-                                            st = reader.readLine();
-                                            if ((!(st == null)) && st.trim().equals("}"))
+                                    line = reader.readLine();
+                                    //read until reached eof or veinName {
+                                    //FMLLog.info("MIXst: "+line);
+                                    if (line != null && line.trim().equals(veinName + " {")) {
+                                        //FMLLog.info("VEINNAMEst: "+line);
+                                        while (!((line == null) || ((line != null) && found[1]))) {
+                                            line = reader.readLine();
+                                            if ((!(line == null)) && line.trim().equals("}"))
                                                 found[1] = true;
                                             //FMLLog.info("vierte");
-                                            //add everything below Veinname { undtil } to raw
-                                            raw.add(st);
+                                            //add everything below veinName { undtil } to raw
+                                            raw.add(line);
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                } while (st != null);
+                } while (line != null);
                 reader.close();//not needed anymore
 
-                if (!raw.isEmpty())
-                    for (int i = 0; i < raw.size(); i++) {
-                        //filter needed booleans from raw
-                        ///FMLLog.info("raw contains"+raw.get(i));
-                        for (int j = 0; j < DimensionHelper.DimName.length; j++)
-                            if (raw.get(i).contains(DimensionHelper.DimName[j]))
-                                rawbools.add(raw.get(i));
-                        //FMLLog.info("rawbools: "+rawbools.get(i));
-                    }
-                else GTNEIOrePlugin.LOG.info("Config entry not found for Vein: " + Veinname);
+                test1(veinName, raw, rawBools);
 
-                String ret = " ";
+                StringBuilder ret = new StringBuilder(" ");
 
-                HashSet<String> rawboolsset = new HashSet<String>();
-                if (!rawbools.isEmpty()) {
-                    //remove dublicats
-                    for (int i = 0; i < rawbools.size(); i++) {
-                        st = rawbools.get(i).replace("B:", "").replace("_true", "").replace("_false", "").replaceAll(" ", "").replaceAll("\"", "");
-                        rawboolsset.add(st);
-                    }
-                    rawbools = new ArrayList<String>(rawboolsset);
+                HashSet<String> rawBoolSet = new HashSet<>();
+                if (!rawBools.isEmpty()) {
+                    //remove duplicates
+                    rawBools = test2(rawBools, rawBoolSet);
                     //filter for dims set to true
-                    for (int i = 0; i < rawbools.size(); i++) {
-                        st = rawbools.get(i);
-                        //FMLLog.info("RawBools:"+st);
+                    for (String rawBool : rawBools) {
+                        line = rawBool;
+                        //FMLLog.info("RawBools:"+line);
                         for (int j = 0; j < DimensionHelper.DimName.length; j++) {
-                            if (st.contains(DimensionHelper.DimName[j]))
-                                if (st.contains("=true"))
-                                    ret = (ret + DimensionHelper.DimNameDisplayed[j] + ",");
+                            if (line.contains(DimensionHelper.DimName[j]))
+                                if (line.contains("=true"))
+                                    ret.append(DimensionHelper.DimNameDisplayed[j]).append(",");
                         }
                     }
                 }
-                ret = ret.trim();
+                ret = new StringBuilder(ret.toString().trim());
                 //FMLLog.info("ret:"+ret);
-                if (ret.equals("") || ret.equals(" "))
-                    ret = "Not aviable in any Galactic Dim!";
-                return ret;
+                if (ret.toString().isEmpty() || ret.toString().equals(" "))
+                    ret = new StringBuilder("Not available in any Galactic Dim!");
+                return ret.toString();
             } catch (IOException e) {
                 e.printStackTrace();
                 return "Error while Loading CFG";
             }
+    }
+
+    private static List<String> test2(List<String> rawBools, HashSet<String> rawBoolSet) {
+        String string;
+        for (String rawBool : rawBools) {
+            string = rawBool.replace("B:", "")
+                            .replace("_true", "")
+                            .replace("_false", "")
+                            .replaceAll(" ", "")
+                            .replaceAll("\"", "");
+            rawBoolSet.add(string);
+        }
+        rawBools = new ArrayList<>(rawBoolSet);
+        return rawBools;
+    }
+
+    private static void test1(String veinName, List<String> raw, List<String> rawBools) {
+//        if (raw.isEmpty()) {
+//            GTNEIOrePlugin.LOG.info("Config entry not found for Vein: " + veinName);
+//            return;
+//        }
+//
+//        raw.forEach(string -> {
+//            Arrays.stream(DimensionHelper.DimName)
+//                  .forEach(dimName -> {
+//                      if (string.contains(dimName)) {
+//                          rawBools.add(string);
+//                      }
+//                  });
+//        });
+        if (!raw.isEmpty()) {
+            for (String string : raw) {
+                //filter needed booleans from raw
+                ///FMLLog.info("raw contains"+raw.get(i));
+                for (int j = 0; j < DimensionHelper.DimName.length; j++) {
+                    if (string.contains(DimensionHelper.DimName[j])) {
+                        rawBools.add(string);
+                    }
+                }
+                //FMLLog.info("rawBools: "+rawBools.get(i));
+            }
+        } else {
+            GTNEIOrePlugin.LOG.info("Config entry not found for Vein: " + veinName);
+        }
     }
 }

@@ -9,7 +9,7 @@ import org.apache.commons.beanutils.converters.BooleanConverter;
 
 import java.util.ResourceBundle;
 
-public class XtoBool<T> extends AbstractBeanField<T> {
+public class XToBool<T> extends AbstractBeanField<T> {
 
     @Override
     protected Object convert(String value) throws CsvDataTypeMismatchException, CsvConstraintViolationException {
