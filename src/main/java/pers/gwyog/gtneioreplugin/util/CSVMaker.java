@@ -5,7 +5,6 @@ import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import pers.gwyog.gtneioreplugin.GTNEIOrePlugin;
-import pers.gwyog.gtneioreplugin.plugin.gregtech5.PluginGT5VeinStat;
 import pers.gwyog.gtneioreplugin.util.GT5OreLayerHelper.OreLayerWrapper;
 
 import java.io.BufferedWriter;
@@ -22,10 +21,10 @@ public class CSVMaker implements Runnable {
 
     }
 
-    public static List<Oremix> Combsort(List<Oremix> liste) {
+    public static List<OreMix> Combsort(List<OreMix> liste) {
         try {
-            List<Oremix> liste2 = new ArrayList<Oremix>(liste.size());
-            for (Oremix element : liste) {
+            List<OreMix> liste2 = new ArrayList<OreMix>(liste.size());
+            for (OreMix element : liste) {
                 liste2.add(element);
             }
 
@@ -38,9 +37,9 @@ public class CSVMaker implements Runnable {
                 }
                 for (int i = 0; i < liste2.size() - schritt; i++) {
                     if (liste2.get(i).getOreName().substring(0, 3).compareTo((liste2.get(i + schritt).getOreName().substring(0, 3))) > 0) {
-                        Oremix tmp = (Oremix) liste2.get(i);
+                        OreMix tmp = (OreMix) liste2.get(i);
                         liste2.set(i, liste2.get(i + schritt));
-                        liste2.set(i + schritt, (Oremix) tmp);
+                        liste2.set(i + schritt, (OreMix) tmp);
                         vertauscht = true;
                     }
                 }
@@ -55,9 +54,9 @@ public class CSVMaker implements Runnable {
     public void runSmallOres() {
         try {
             Iterator it = GT5OreSmallHelper.mapOreSmallWrapper.entrySet().iterator();
-            List<Oremix> OreVeins = new ArrayList();
+            List<OreMix> OreVeins = new ArrayList();
             while (it.hasNext()) {
-                Oremix oremix = new Oremix();
+                OreMix oremix = new OreMix();
 
                 Map.Entry pair = (Map.Entry) it.next();
                 String Dims = GT5OreSmallHelper.bufferedDims.get(pair.getValue());
@@ -106,10 +105,10 @@ public class CSVMaker implements Runnable {
             }
             BufferedWriter one = Files.newBufferedWriter(Paths.get(GTNEIOrePlugin.CSVnameSmall));
             ColumnPositionMappingStrategy strat = new ColumnPositionMappingStrategy();
-            strat.setType(Oremix.class);
+            strat.setType(OreMix.class);
             String[] columns = "ORENAME,mix,DENSITY,overworld,nether,end,ea,tf,mo,ma,ph,de,as,ce,eu,ga,ca,io,ve,me,en,ti,mi,ob,pr,tr,pl,kb,ha,make,dd,cb,vb,bc,be,bf,tcetie".split("\\,");
             strat.setColumnMapping(columns);
-            StatefulBeanToCsv<Oremix> beanToCsv = new StatefulBeanToCsvBuilder(one)
+            StatefulBeanToCsv<OreMix> beanToCsv = new StatefulBeanToCsvBuilder(one)
                     .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
                     .withMappingStrategy(strat)
                     .build();
@@ -133,23 +132,26 @@ public class CSVMaker implements Runnable {
     public void runVeins() {
         try {
             Iterator it = GT5OreLayerHelper.mapOreLayerWrapper.entrySet().iterator();
-            List<Oremix> OreVeins = new ArrayList();
+            List<OreMix> OreVeins = new ArrayList();
             while (it.hasNext()) {
-                Oremix oremix = new Oremix();
+                OreMix oremix = new OreMix();
 
                 Map.Entry pair = (Map.Entry) it.next();
                 String Dims = GT5OreLayerHelper.bufferedDims.get(pair.getValue());
                 OreLayerWrapper oreLayer = (OreLayerWrapper) pair.getValue();
                 oremix.setOreName(oreLayer.veinName.split("\\.")[2]);
-                oremix.setPrimary(PluginGT5VeinStat.getGTOreLocalizedName(oreLayer.Meta[0]));
-                oremix.setSecondary(PluginGT5VeinStat.getGTOreLocalizedName(oreLayer.Meta[1]));
-                oremix.setInbetween(PluginGT5VeinStat.getGTOreLocalizedName(oreLayer.Meta[2]));
-                oremix.setAround(PluginGT5VeinStat.getGTOreLocalizedName(oreLayer.Meta[3]));
+                oremix.setPrimary(oreLayer.materials[0].mLocalizedName);
+                oremix.setSecondary(oreLayer.materials[1].mLocalizedName);
+                oremix.setInbetween(oreLayer.materials[2].mLocalizedName);
+                oremix.setAround(oreLayer.materials[3].mLocalizedName);
                 oremix.setSize(oreLayer.size);
                 oremix.setHeight(oreLayer.worldGenHeightRange);
                 oremix.setDensity(oreLayer.density);
                 oremix.setWeight(oreLayer.randomWeight);
-                oremix.setMix(Integer.toString(oreLayer.Meta[0]) + "|" + Integer.toString(oreLayer.Meta[1]) + "|" + Integer.toString(oreLayer.Meta[2]) + "|" + Integer.toString(oreLayer.Meta[3]));
+                oremix.setMix(Integer.toString(oreLayer.materials[0].mMetaItemSubID) + "|" +
+                              Integer.toString(oreLayer.materials[1].mMetaItemSubID) + "|" +
+                              Integer.toString(oreLayer.materials[2].mMetaItemSubID) + "|" +
+                              Integer.toString(oreLayer.materials[3].mMetaItemSubID));
                 oremix.as = Dims.contains("As");
                 oremix.bc = Dims.contains("BC");
                 oremix.be = Dims.contains("BE");
@@ -192,10 +194,10 @@ public class CSVMaker implements Runnable {
             }
             BufferedWriter one = Files.newBufferedWriter(Paths.get(GTNEIOrePlugin.CSVname));
             ColumnPositionMappingStrategy strat = new ColumnPositionMappingStrategy();
-            strat.setType(Oremix.class);
+            strat.setType(OreMix.class);
             String[] columns = "ORENAME,PRIMARY,SECONDARY,INBETWEEN,AROUND,mix,TIER,HEIGHT,DENSITY,SIZE,WEIGHT,overworld,nether,end,ea,tf,mo,ma,ph,de,as,ce,eu,ga,ca,io,ve,me,en,ti,mi,ob,pr,tr,pl,kb,ha,make,dd,cb,vb,bc,be,bf,tcetie".split("\\,");
             strat.setColumnMapping(columns);
-            StatefulBeanToCsv<Oremix> beanToCsv = new StatefulBeanToCsvBuilder(one)
+            StatefulBeanToCsv<OreMix> beanToCsv = new StatefulBeanToCsvBuilder(one)
                     .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
                     .withMappingStrategy(strat)
                     .build();
