@@ -18,9 +18,9 @@ import java.util.HashSet;
      dependencies = "required-after:gregtech;" +
                     "required-after:NotEnoughItems")
 public class GTNEIOrePlugin {
-    public static final String MODID = "gtneioreplugin";
-    public static final String NAME = "GT NEI Ore Plugin GT:NH Mod";
-    public static final String VERSION = "@version@";
+    public static final String MODID = Tags.MODID;
+    public static final String NAME = Tags.MODNAME;
+    public static final String VERSION = Tags.VERSION;
     public static final Logger LOG = LogManager.getLogger(NAME);
     public static boolean csv = false;
     public static String CSVname;
@@ -33,14 +33,34 @@ public class GTNEIOrePlugin {
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
-        Config c = new Config(event, Tags.MODID + ".cfg");
-        csv = c.tConfig.getBoolean("print csv", "ALL", false, "princsv, you need apache commons collections to be injected in the minecraft jar.");
-        CSVname = c.tConfig.getString("CSV_name", "ALL", event.getModConfigurationDirectory() + "/GTNH-Oresheet.csv", "rename the oresheet here, it will appear in /config");
-        CSVnameSmall= c.tConfig.getString("CSV_name_for_Small_Ore_Sheet", "ALL", event.getModConfigurationDirectory() + "/GTNH-Small-Ores-Sheet.csv", "rename the oresheet here, it will appear in /config");
-        hideBackground = c.tConfig.getBoolean("Hide Background", "ALL", true, "Hides the Background when the tooltip for the Dimensions is rendered");
-        toolTips = c.tConfig.getBoolean("DimTooltip", "ALL", true, "Activates Dimensison Tooltips");
+        Config config = new Config(event, Tags.MODID + ".cfg");
 
-        c.save();
+        csv = config.tConfig.getBoolean("print csv",
+                                        "ALL",
+                                        false,
+                                        "print csv, you need apache commons collections to be injected in the minecraft jar.");
+
+        CSVname = config.tConfig.getString("CSV_name",
+                                           "ALL",
+                                           event.getModConfigurationDirectory() + "/GTNH-Oresheet.csv",
+                                           "rename the oresheet here, it will appear in /config");
+
+        CSVnameSmall= config.tConfig.getString("CSV_name_for_Small_Ore_Sheet",
+                                               "ALL",
+                                               event.getModConfigurationDirectory() + "/GTNH-Small-Ores-Sheet.csv",
+                                               "rename the oresheet here, it will appear in /config");
+
+        hideBackground = config.tConfig.getBoolean("Hide Background",
+                                                   "ALL",
+                                                   true,
+                                                   "Hides the Background when the tooltip for the Dimensions is rendered");
+
+        toolTips = config.tConfig.getBoolean("DimTooltip",
+                                             "ALL",
+                                             true,
+                                             "Activates Dimensison Tooltips");
+
+        config.save();
     }
 
     @EventHandler
