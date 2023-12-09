@@ -7,6 +7,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import pers.gwyog.gtneioreplugin.config.ConfigGui;
+import pers.gwyog.gtneioreplugin.config.GUIConfig;
 import pers.gwyog.gtneioreplugin.util.GT5OreLayerHelper;
 import pers.gwyog.gtneioreplugin.util.GT5OreSmallHelper;
 
@@ -16,7 +18,8 @@ import java.util.HashSet;
      name = Tags.MODNAME,
      version = Tags.VERSION,
      dependencies = "required-after:gregtech;" +
-                    "required-after:NotEnoughItems")
+                    "required-after:NotEnoughItems",
+     guiFactory = Tags.GROUPNAME + ".config.GTNOPGuiFactory")
 public class GTNEIOrePlugin {
     public static final String MODID = Tags.MODID;
     public static final String NAME = Tags.MODNAME;
@@ -33,6 +36,7 @@ public class GTNEIOrePlugin {
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
+        GUIConfig.poke();
         Config config = new Config(event, Tags.MODID + ".cfg");
 
         csv = config.tConfig.getBoolean("print csv",
