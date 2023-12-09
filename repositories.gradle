@@ -6,8 +6,12 @@ repositories {
         url = "https://oss.sonatype.org/content/repositories/snapshots/"
     }
     maven {
+        name = "gtmega"
+        url = "https://mvn.falsepattern.com/gtmega_releases/"
+    }
+    maven {
         name = "ic2"
-        url = "https://maven.ic2.player.to/"
+        url = "https://mvn.falsepattern.com/ic2/"
         metadataSources {
             mavenPom()
             artifact()
@@ -24,9 +28,5 @@ repositories {
     maven {
         name = "FalsePattern Jenkins Mirror"
         url = "https://mvn.falsepattern.com/usrv/"
-    }
-    maven {
-        name = "FalsePattern GTMEGA Releases"
-        url = "https://mvn.falsepattern.com/gtmega_releases/"
     }
 }

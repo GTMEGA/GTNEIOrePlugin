@@ -33,7 +33,6 @@ gtnop.gui.nei.oreOthers=Other ore
 gtnop.nei.genPosition=Position
 gtnop.nei.genPositionInfo=In the center of each chunk
 
-
 # world names
 gtnop.world.Overworld=Overworld
 gtnop.world.Nether=Nether
@@ -71,16 +70,18 @@ gtnop.world.BarnardF=BarnardF
 gtnop.world.TcetiE=TcetiE
 gtnop.world.Underdark=Deep Dark
 
-
 # biome names
 gtnop.biome.none.name=None
 
-
 # ore names extra
 gtnop.ore.null.name=None
-
 
 # vein types
 gtnop.ore.vein.name=Vein 
 gtnop.ore.asteroid.name=Asteriod
 gtnop.ore.custom.name=Custom
+
+#config strings
+gtnop.config.gui.color.red=Font Color Channel - Red
+gtnop.config.gui.color.green=Font Color Channel - Green
+gtnop.config.gui.color.blue=Font Color Channel - Blue

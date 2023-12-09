@@ -2,17 +2,20 @@ package pers.gwyog.gtneioreplugin.plugin.gregtech5;
 
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
-import cpw.mods.fml.common.Loader;
 import gregtech.common.blocks.GT_Block_Ore;
 import gregtech.common.blocks.GT_Block_Ore_Abstract;
 import lombok.val;
+import pers.gwyog.gtneioreplugin.config.PluginGuiConfiguration;
+import pers.gwyog.gtneioreplugin.util.GT5OreLayerHelper;
+import pers.gwyog.gtneioreplugin.util.GT5OreLayerHelper.OreLayerWrapper;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
-import pers.gwyog.gtneioreplugin.util.GT5OreLayerHelper;
-import pers.gwyog.gtneioreplugin.util.GT5OreLayerHelper.OreLayerWrapper;
+import cpw.mods.fml.common.Loader;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -197,6 +200,10 @@ public class PluginGT5VeinStat extends PluginGT5Base {
 
         String sDimNames = GT5OreLayerHelper.bufferedDims.get(oreLayer);
 
+        val fontColor = new Color(PluginGuiConfiguration.GUI_FONT_COLOR_RED_COMPONENT,
+                                  PluginGuiConfiguration.GUI_FONT_COLOR_GREEN_COMPONENT,
+                                  PluginGuiConfiguration.GUI_FONT_COLOR_BLUE_COMPONENT).getRGB();
+
         /*if (getLocalizedVeinName(oreLayer).length>1) {
         GuiDraw.drawString(I18n.format("gtnop.gui.nei.veinName") + ": " + getLocalizedVeinName(oreLayer)[0], 2, 20, 0x404040, false);
         if (getLocalizedVeinName(oreLayer).length>2) {
@@ -207,53 +214,51 @@ public class PluginGT5VeinStat extends PluginGT5Base {
         GuiDraw.drawString(I18n.format(getLocalizedVeinName(oreLayer)[1]), 2, 30, 0x404040, false);
         }
         else*/
-        val textColor = 0x404040;
-
         if(Loader.isModLoaded("visualprospecting")) {
-            GuiDraw.drawString(I18n.format("gtnop.gui.nei.veinName") + ": " + I18n.format(oreLayer.veinName) + "" + I18n.format("gtnop.gui.nei.vein"), 2, 20, textColor, false);
+            GuiDraw.drawString(I18n.format("gtnop.gui.nei.veinName") + ": " + I18n.format(oreLayer.veinName) + "" + I18n.format("gtnop.gui.nei.vein"), 2, 20, fontColor, false);
         }
         else {
             val localizedName = oreLayer.materials[0] != null ?  oreLayer.materials[0].mLocalizedName : "placeholder name";
 
             if (localizedName.contains("Ore"))
-                GuiDraw.drawString(I18n.format("gtnop.gui.nei.veinName") + ": " + localizedName.split("Ore")[0] + "" + I18n.format("gtnop.gui.nei.vein"), 2, 20, textColor, false);
+                GuiDraw.drawString(I18n.format("gtnop.gui.nei.veinName") + ": " + localizedName.split("Ore")[0] + "" + I18n.format("gtnop.gui.nei.vein"), 2, 20, fontColor, false);
             else if (localizedName.contains("Sand"))
-                GuiDraw.drawString(I18n.format("gtnop.gui.nei.veinName") + ": " + localizedName.split("Sand")[0] + "" + I18n.format("gtnop.gui.nei.vein"), 2, 20, textColor, false);
+                GuiDraw.drawString(I18n.format("gtnop.gui.nei.veinName") + ": " + localizedName.split("Sand")[0] + "" + I18n.format("gtnop.gui.nei.vein"), 2, 20, fontColor, false);
             else
-                GuiDraw.drawString(I18n.format("gtnop.gui.nei.veinName") + ": " + localizedName + " " + I18n.format("gtnop.gui.nei.vein"), 2, 20, textColor, false);
+                GuiDraw.drawString(I18n.format("gtnop.gui.nei.veinName") + ": " + localizedName + " " + I18n.format("gtnop.gui.nei.vein"), 2, 20, fontColor, false);
         }
         
         drawToolTip(sDimNames);
         if (!ttDisplayed) {
             val primaryOreName = oreLayer.materials[0] != null ? oreLayer.materials[0].mLocalizedName : "";
-            GuiDraw.drawString(I18n.format("gtnop.gui.nei.primaryOre") + ": " + primaryOreName, 2, 50, textColor, false);
+            GuiDraw.drawString(I18n.format("gtnop.gui.nei.primaryOre") + ": " + primaryOreName, 2, 50, fontColor, false);
 
             val secondaryOreName = oreLayer.materials[1] != null ? oreLayer.materials[1].mLocalizedName : "";
-            GuiDraw.drawString(I18n.format("gtnop.gui.nei.secondaryOre") + ": " + secondaryOreName, 2, 60, textColor, false);
+            GuiDraw.drawString(I18n.format("gtnop.gui.nei.secondaryOre") + ": " + secondaryOreName, 2, 60, fontColor, false);
 
             val betweenOreName = oreLayer.materials[2] != null ? oreLayer.materials[2].mLocalizedName : "";
-            GuiDraw.drawString(I18n.format("gtnop.gui.nei.betweenOre") + ": " + betweenOreName, 2, 70, textColor, false);
+            GuiDraw.drawString(I18n.format("gtnop.gui.nei.betweenOre") + ": " + betweenOreName, 2, 70, fontColor, false);
 
             val sporadicOreName = oreLayer.materials[3] != null ? oreLayer.materials[3].mLocalizedName : "";
-            GuiDraw.drawString(I18n.format("gtnop.gui.nei.sporadicOre") + ": " + sporadicOreName, 2, 80, textColor, false);
+            GuiDraw.drawString(I18n.format("gtnop.gui.nei.sporadicOre") + ": " + sporadicOreName, 2, 80, fontColor, false);
 
-            GuiDraw.drawString(I18n.format("gtnop.gui.nei.genHeight") + ": " + oreLayer.worldGenHeightRange, 2, 90, textColor, false);
+            GuiDraw.drawString(I18n.format("gtnop.gui.nei.genHeight") + ": " + oreLayer.worldGenHeightRange, 2, 90, fontColor, false);
 
-            GuiDraw.drawString(I18n.format("gtnop.gui.nei.weightedChance") + ": " + Integer.toString(oreLayer.randomWeight), 100, 90, textColor, false);
+            GuiDraw.drawString(I18n.format("gtnop.gui.nei.weightedChance") + ": " + Integer.toString(oreLayer.randomWeight), 100, 90, fontColor, false);
 
-            GuiDraw.drawString(I18n.format("gtnop.gui.nei.worldNames") + ": ", 2, 100, textColor, false);
+            GuiDraw.drawString(I18n.format("gtnop.gui.nei.worldNames") + ": ", 2, 100, fontColor, false);
             if (sDimNames.length() > 36) {
-                GuiDraw.drawString(I18n.format("") + sDimNames.substring(0, 36), 2, 110, textColor, false);
+                GuiDraw.drawString(I18n.format("") + sDimNames.substring(0, 36), 2, 110, fontColor, false);
                 if (sDimNames.length() > 70) {
-                    GuiDraw.drawString(I18n.format("") + sDimNames.substring(36, 70), 2, 120, textColor, false);
-                    GuiDraw.drawString(I18n.format("") + sDimNames.substring(70, sDimNames.length() - 1), 2, 130, textColor, false);
+                    GuiDraw.drawString(I18n.format("") + sDimNames.substring(36, 70), 2, 120, fontColor, false);
+                    GuiDraw.drawString(I18n.format("") + sDimNames.substring(70, sDimNames.length() - 1), 2, 130, fontColor, false);
                 } else
-                    GuiDraw.drawString(I18n.format("") + sDimNames.substring(36, sDimNames.length() - 1), 2, 120, textColor, false);
+                    GuiDraw.drawString(I18n.format("") + sDimNames.substring(36, sDimNames.length() - 1), 2, 120, fontColor, false);
             } else
-                GuiDraw.drawString(I18n.format("") + sDimNames.substring(0, sDimNames.length() - 1), 2, 110, textColor, false);
+                GuiDraw.drawString(I18n.format("") + sDimNames.substring(0, sDimNames.length() - 1), 2, 110, fontColor, false);
         }
         //if (GT5OreLayerHelper.restrictBiomeSupport) GuiDraw.drawString(I18n.format("gtnop.gui.nei.restrictBiome") + ": " + getBiomeTranslated(oreLayer.restrictBiome), 2, 122, 0x404040, false);
-        GuiDraw.drawStringR(EnumChatFormatting.BOLD + I18n.format("gtnop.gui.nei.seeAll"), getGuiWidth() - 3, 5, textColor, false);
+        GuiDraw.drawStringR(EnumChatFormatting.BOLD + I18n.format("gtnop.gui.nei.seeAll"), getGuiWidth() - 3, 5, fontColor, false);
     }
 
     @Override
