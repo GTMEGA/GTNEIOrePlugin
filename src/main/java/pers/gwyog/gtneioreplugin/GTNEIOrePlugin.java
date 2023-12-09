@@ -7,8 +7,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import pers.gwyog.gtneioreplugin.config.ConfigGui;
-import pers.gwyog.gtneioreplugin.config.GUIConfig;
+import pers.gwyog.gtneioreplugin.config.PluginGuiConfiguration;
 import pers.gwyog.gtneioreplugin.util.GT5OreLayerHelper;
 import pers.gwyog.gtneioreplugin.util.GT5OreSmallHelper;
 
@@ -36,7 +35,7 @@ public class GTNEIOrePlugin {
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
-        GUIConfig.poke();
+        PluginGuiConfiguration.poke();
         Config config = new Config(event, Tags.MODID + ".cfg");
 
         csv = config.tConfig.getBoolean("print csv",

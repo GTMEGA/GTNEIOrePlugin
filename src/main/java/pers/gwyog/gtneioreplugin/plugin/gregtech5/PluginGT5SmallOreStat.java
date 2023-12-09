@@ -5,48 +5,54 @@ import codechicken.nei.PositionedStack;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GT_OreDictUnificator;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import lombok.val;
+import pers.gwyog.gtneioreplugin.config.PluginGuiConfiguration;
 import pers.gwyog.gtneioreplugin.util.GT5OreSmallHelper;
 import pers.gwyog.gtneioreplugin.util.GT5OreSmallHelper.OreSmallWrapper;
 
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-
-import static pers.gwyog.gtneioreplugin.config.GUIConfig.GUI_FONT_COLOR;
 
 public class PluginGT5SmallOreStat extends PluginGT5Base {
     @Override
     public void drawExtras(int recipe) {
+        val fontColor = new Color(PluginGuiConfiguration.GUI_FONT_COLOR_RED_COMPONENT,
+                                  PluginGuiConfiguration.GUI_FONT_COLOR_GREEN_COMPONENT,
+                                  PluginGuiConfiguration.GUI_FONT_COLOR_BLUE_COMPONENT).getRGB();
+        
         CachedOreSmallRecipe crecipe = (CachedOreSmallRecipe) this.arecipes.get(recipe);
         OreSmallWrapper oreSmall = GT5OreSmallHelper.mapOreSmallWrapper.get(crecipe.oreGenName);
         String sDimNames = GT5OreSmallHelper.bufferedDims.get(oreSmall);
         GuiDraw.drawString(I18n.format("gtnop.gui.nei.oreName") + ": " + getGTOreLocalizedName((short) (oreSmall.oreMeta + 16000)), 2, 18,
-                           GUI_FONT_COLOR, false);
+                           fontColor, false);
         drawToolTip(sDimNames);
         if (!ttDisplayed) {
             GuiDraw.drawString(I18n.format("gtnop.gui.nei.genHeight") + ": " + oreSmall.worldGenHeightRange, 2, 31,
-                               GUI_FONT_COLOR, false);
-            GuiDraw.drawString(I18n.format("gtnop.gui.nei.amount") + ": " + oreSmall.amountPerChunk, 2, 44, GUI_FONT_COLOR, false);
+                               fontColor, false);
+            GuiDraw.drawString(I18n.format("gtnop.gui.nei.amount") + ": " + oreSmall.amountPerChunk, 2, 44, fontColor, false);
             // GuiDraw.drawString(I18n.format("gtnop.gui.nei.worldNames") + ": " + getWorldNameTranslated(oreSmall.genOverworld, oreSmall.genNether, oreSmall.genEnd, oreSmall.genMoon, oreSmall.genMars), 2, 57, 0x404040, false);
             // if (GT5OreSmallHelper.restrictBiomeSupport) GuiDraw.drawString(I18n.format("gtnop.gui.nei.restrictBiome") + ": " + getBiomeTranslated(oreSmall.restrictBiome), 2, 70, 0x404040, false);
             GuiDraw.drawString(I18n.format("gtnop.gui.nei.chanceDrops") + ": ", 2, 83 + getRestrictBiomeOffset(),
-                               GUI_FONT_COLOR, false);
-            GuiDraw.drawString(I18n.format("gtnop.gui.nei.worldNames") + ": ", 2, 110, GUI_FONT_COLOR, false);
+                               fontColor, false);
+            GuiDraw.drawString(I18n.format("gtnop.gui.nei.worldNames") + ": ", 2, 110, fontColor, false);
             if (sDimNames.length() > 36) {
-                GuiDraw.drawString(I18n.format("") + sDimNames.substring(0, 36), 2, 120, GUI_FONT_COLOR, false);
+                GuiDraw.drawString(I18n.format("") + sDimNames.substring(0, 36), 2, 120, fontColor, false);
                 if (sDimNames.length() > 70) {
-                    GuiDraw.drawString(I18n.format("") + sDimNames.substring(36, 70), 2, 130, GUI_FONT_COLOR, false);
+                    GuiDraw.drawString(I18n.format("") + sDimNames.substring(36, 70), 2, 130, fontColor, false);
                     GuiDraw.drawString(I18n.format("") + sDimNames.substring(70, sDimNames.length() - 1), 2, 140,
-                                       GUI_FONT_COLOR, false);
+                                       fontColor, false);
                 } else
                     GuiDraw.drawString(I18n.format("") + sDimNames.substring(36, sDimNames.length() - 1), 2, 130,
-                                       GUI_FONT_COLOR, false);
+                                       fontColor, false);
             } else
-                GuiDraw.drawString(I18n.format("") + sDimNames.substring(0, sDimNames.length() - 1), 2, 120, GUI_FONT_COLOR, false);
+                GuiDraw.drawString(I18n.format("") + sDimNames.substring(0, sDimNames.length() - 1), 2, 120, fontColor, false);
         }
-        GuiDraw.drawStringR(EnumChatFormatting.BOLD + I18n.format("gtnop.gui.nei.seeAll"), getGuiWidth() - 3, 5, GUI_FONT_COLOR, false);
+        GuiDraw.drawStringR(EnumChatFormatting.BOLD + I18n.format("gtnop.gui.nei.seeAll"), getGuiWidth() - 3, 5, fontColor, false);
     }
 
     public int getRestrictBiomeOffset() {

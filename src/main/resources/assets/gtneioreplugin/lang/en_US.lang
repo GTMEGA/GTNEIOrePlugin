@@ -82,4 +82,6 @@ gtnop.ore.asteroid.name=Asteriod
 gtnop.ore.custom.name=Custom
 
 #config strings
-gtnop.config.gui.color=Font Color
+gtnop.config.gui.color.red=Font Color Channel - Red
+gtnop.config.gui.color.green=Font Color Channel - Green
+gtnop.config.gui.color.blue=Font Color Channel - Blue

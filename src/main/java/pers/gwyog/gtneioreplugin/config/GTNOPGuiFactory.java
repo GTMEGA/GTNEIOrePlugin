@@ -7,6 +7,6 @@ import net.minecraft.client.gui.GuiScreen;
 public class GTNOPGuiFactory implements SimpleGuiFactory {
     @Override
     public Class<? extends GuiScreen> mainConfigGuiClass() {
-        return ConfigGui.class;
+        return ModConfigGui.class;
     }
 }
