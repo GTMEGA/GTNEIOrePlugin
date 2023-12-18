@@ -1,25 +1,44 @@
 // Add your dependencies here
 
+//file:noinspection DependencyNotationArgument
+static def curse(curseDep) {
+    return "curse.maven:" + curseDep
+}
+
+def deobfCurse(curseDep) {
+    try {
+        return deobfMaven("https://cursemaven.com/", curse(curseDep))
+    } catch (Exception ignored) {
+        println("Failed to get dep " + curseDep + " from cursemaven. Grabbing from mirror.")
+        return deobfMaven("https://mvn.falsepattern.com/cursemaven/", curse(curseDep))
+    }
+}
+
 dependencies {
-    compileOnly("org.projectlombok:lombok:1.18.24")
-    annotationProcessor("org.projectlombok:lombok:1.18.24")
-
-    compile("gtmega:gt5u-mc1.7.10:5.33.0-mega:dev")
-
-    compileOnly "com.falsepattern:falsepatternlib-mc1.7.10:1.0.0:api"
-    runtimeOnly "com.falsepattern:falsepatternlib-mc1.7.10:1.0.0:dev"
-
-    compile("codechicken:codechickencore-mc1.7.10:1.0.9-gtmega:dev") {
-        transitive = false;
+    // GregTech
+    implementation("gtmega:gt5u-mc1.7.10:5.33.0-mega:dev") {
+        transitive = false
     }
-
-    compile("codechicken:codechickenlib-mc1.7.10:1.1.4-gtmega:dev") {
-        transitive = false;
+    implementation("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev")
+    implementation("mega:structurelib-mc1.7.10:1.1.2:dev")
+    implementation("eu.usrv:YAMCore:1.7.10-0.5.79:deobf") {
+        transitive = false
     }
+    compileOnly(deobfCurse("applecore-224472:2530879"))
 
-    compile("codechicken:notenoughitems-mc1.7.10:2.1.5-gtmega:dev") {
-        transitive = false;
-    }
+    // Open CSV
+    implementation("com.opencsv:opencsv:4.0")
 
-    compile "com.opencsv:opencsv:4.0"
+    // FalsePattern Lib
+    compileOnly("com.falsepattern:falsepatternlib-mc1.7.10:1.0.0:api")
+    runtimeOnly("com.falsepattern:falsepatternlib-mc1.7.10:1.0.0:dev")
+
+    // Not Enough Items
+    implementation("codechicken:codechickencore-mc1.7.10:1.0.9-gtmega:dev")
+    implementation("codechicken:codechickenlib-mc1.7.10:1.1.4-gtmega:dev")
+    implementation("codechicken:notenoughitems-mc1.7.10:2.1.5-gtmega:dev")
+
+    // Lombok
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
 }
