@@ -154,7 +154,7 @@ public class PluginGT5VeinStat extends PluginGT5Base {
                 }
             }
         } else if (item instanceof GT_MetaGenerated_Item_03) {
-            val metaItem = (GT_MetaGenerated_Item_03) item;
+            //val metaItem = (GT_MetaGenerated_Item_03) item;
         } else {
             super.loadCraftingRecipes(stack);
         }
