@@ -2,6 +2,7 @@ package pers.gwyog.gtneioreplugin.plugin.gregtech5;
 
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
+import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.common.blocks.GT_Block_Ore;
 import gregtech.common.blocks.GT_Block_Ore_Abstract;
 import gregtech.common.items.GT_MetaGenerated_Item_03;
@@ -154,7 +155,19 @@ public class PluginGT5VeinStat extends PluginGT5Base {
                 }
             }
         } else if (item instanceof GT_MetaGenerated_Item_03) {
-            //val metaItem = (GT_MetaGenerated_Item_03) item;
+            val data = GT_OreDictUnificator.getItemData(stack);
+            val material = data.mMaterial.mMaterial;
+
+            for (OreLayerWrapper oreLayer : GT5OreLayerHelper.mapOreLayerWrapper.values()) {
+                val condition = oreLayer.materials[0] == material ||
+                                oreLayer.materials[1] == material ||
+                                oreLayer.materials[2] == material ||
+                                oreLayer.materials[3] == material;
+
+                if (condition) {
+                    this.addRecipesForOreLayer(oreLayer);
+                }
+            }
         } else {
             super.loadCraftingRecipes(stack);
         }
