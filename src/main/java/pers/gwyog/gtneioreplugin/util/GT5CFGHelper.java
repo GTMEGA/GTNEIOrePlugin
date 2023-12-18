@@ -59,21 +59,22 @@ public class GT5CFGHelper {
         if (F == null) {
             FMLLog.bigWarning("GT_CFG_NOT_found[0]");
             return "Error while Loading CFG";
-        } else
+        } else {
             try {
                 int buffer = (int) (0.1 * Runtime.getRuntime().freeMemory());
-                if (buffer > F.length())
+                if (buffer > F.length()) {
                     buffer = (int) F.length();
+                }
                 //allocate 10% of free memory for read-in-buffer, if there is less than filesize memory available
                 //FMLLog.info("GT_CFG_found[0]");
                 FileReader in = new FileReader(F);
                 //FMLLog.info("FileReader created");
                 BufferedReader reader = new BufferedReader(in, buffer);
                 //FMLLog.info("BufferedReader" +Integer.toString(buffer)+"created");
-                String line = null;
-                List<String> raw = new ArrayList<>();
+                String       line     = null;
+                List<String> raw      = new ArrayList<>();
                 List<String> rawBools = new ArrayList<>();
-                Boolean[] found = new Boolean[2];
+                Boolean[]    found    = new Boolean[2];
                 found[0] = false;
                 found[1] = false;
 
@@ -92,8 +93,9 @@ public class GT5CFGHelper {
                                 //FMLLog.info("VEINNAMEst: "+line);
                                 while (!((line == null) || ((line != null) && found[0]))) {
                                     line = reader.readLine();
-                                    if ((!(line == null)) && line.trim().equals("}"))
+                                    if ((!(line == null)) && line.trim().equals("}")) {
                                         found[0] = true;
+                                    }
                                     //FMLLog.info("dritte");
                                     //add everything below veinName { undtil } to raw
                                     raw.add(line);
@@ -116,8 +118,9 @@ public class GT5CFGHelper {
                                         //FMLLog.info("VEINNAMEst: "+line);
                                         while (!((line == null) || ((line != null) && found[1]))) {
                                             line = reader.readLine();
-                                            if ((!(line == null)) && line.trim().equals("}"))
+                                            if ((!(line == null)) && line.trim().equals("}")) {
                                                 found[1] = true;
+                                            }
                                             //FMLLog.info("vierte");
                                             //add everything below veinName { undtil } to raw
                                             raw.add(line);
@@ -143,21 +146,25 @@ public class GT5CFGHelper {
                         line = rawBool;
                         //FMLLog.info("RawBools:"+line);
                         for (int j = 0; j < DimensionHelper.DimName.length; j++) {
-                            if (line.contains(DimensionHelper.DimName[j]))
-                                if (line.contains("=true"))
+                            if (line.contains(DimensionHelper.DimName[j])) {
+                                if (line.contains("=true")) {
                                     ret.append(DimensionHelper.DimNameDisplayed[j]).append(",");
+                                }
+                            }
                         }
                     }
                 }
                 ret = new StringBuilder(ret.toString().trim());
                 //FMLLog.info("ret:"+ret);
-                if (ret.toString().isEmpty() || ret.toString().equals(" "))
+                if (ret.toString().isEmpty() || ret.toString().equals(" ")) {
                     ret = new StringBuilder("Not available in any Galactic Dim!");
+                }
                 return ret.toString();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return "Error while Loading CFG";
             }
+        }
     }
 
     private static List<String> test2(List<String> rawBools, HashSet<String> rawBoolSet) {
