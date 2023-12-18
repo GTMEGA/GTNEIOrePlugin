@@ -88,7 +88,7 @@ public class PluginGT5SmallOreStat extends PluginGT5Base {
                     this.arecipes.add(new CachedOreSmallRecipe(oreSmallWorldGen.oreGenName, stackList, materialDustStackList, GT5OreSmallHelper.mapOreMetaToOreDrops.get(baseMeta)));
                 }
             }
-        } else if (GT5OreSmallHelper.mapOreDropUnlocalizedNameToOreMeta.keySet().contains(stack.getUnlocalizedName())) {
+        } else if (GT5OreSmallHelper.mapOreDropUnlocalizedNameToOreMeta.containsKey(stack.getUnlocalizedName())) {
             short baseMeta = GT5OreSmallHelper.mapOreDropUnlocalizedNameToOreMeta.get(stack.getUnlocalizedName());
             for (String oreGenName : GT5OreSmallHelper.mapOreSmallWrapper.keySet()) {
                 OreSmallWrapper oreSmallWrapper = GT5OreSmallHelper.mapOreSmallWrapper.get(oreGenName);

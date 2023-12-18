@@ -9,11 +9,6 @@ dependencies {
     compileOnly "com.falsepattern:falsepatternlib-mc1.7.10:1.0.0:api"
     runtimeOnly "com.falsepattern:falsepatternlib-mc1.7.10:1.0.0:dev"
 
-//    implementation ("com.falsepattern:endlessids-mc1.7.10:1.5-beta0001:dev") {
-//        exclude group: 'com.falsepattern',
-//                module: '00gasstation-mc1.7.10'
-//    }
-
     compile("codechicken:codechickencore-mc1.7.10:1.0.9-gtmega:dev") {
         transitive = false;
     }

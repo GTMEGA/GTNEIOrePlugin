@@ -4,6 +4,7 @@ import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import gregtech.common.blocks.GT_Block_Ore;
 import gregtech.common.blocks.GT_Block_Ore_Abstract;
+import gregtech.common.items.GT_MetaGenerated_Item_03;
 import lombok.val;
 import pers.gwyog.gtneioreplugin.config.PluginGuiConfiguration;
 import pers.gwyog.gtneioreplugin.util.GT5OreLayerHelper;
@@ -152,6 +153,8 @@ public class PluginGT5VeinStat extends PluginGT5Base {
                     }
                 }
             }
+        } else if (item instanceof GT_MetaGenerated_Item_03) {
+            val metaItem = (GT_MetaGenerated_Item_03) item;
         } else {
             super.loadCraftingRecipes(stack);
         }
