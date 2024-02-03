@@ -16,7 +16,7 @@ def deobfCurse(curseDep) {
 
 dependencies {
     // GregTech
-    implementation("gtmega:gt5u-mc1.7.10:5.33.0-mega:dev") {
+    implementation("gtmega:gt5u-mc1.7.10:5.34.2-mega:dev") {
         transitive = false
     }
     implementation("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev")

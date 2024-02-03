@@ -2,10 +2,13 @@ package pers.gwyog.gtneioreplugin.plugin.gregtech5;
 
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
+import gregtech.api.enums.Materials;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.common.blocks.GT_Block_Ore;
 import gregtech.common.blocks.GT_Block_Ore_Abstract;
+import gregtech.common.blocks.GT_Item_Ores;
 import gregtech.common.items.GT_MetaGenerated_Item_03;
+import gregtech.common.items.GT_MetaGenerated_Item_OreChunks;
 import lombok.val;
 import pers.gwyog.gtneioreplugin.config.PluginGuiConfiguration;
 import pers.gwyog.gtneioreplugin.util.GT5OreLayerHelper;
@@ -154,7 +157,7 @@ public class PluginGT5VeinStat extends PluginGT5Base {
                     }
                 }
             }
-        } else if (item instanceof GT_MetaGenerated_Item_03) {
+        } else if (item instanceof GT_MetaGenerated_Item_OreChunks) {
             val data = GT_OreDictUnificator.getItemData(stack);
             val material = data.mMaterial.mMaterial;
 
